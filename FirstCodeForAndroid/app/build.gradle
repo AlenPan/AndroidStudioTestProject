@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+// 声明这是一个应用程序模块，如果是'com.android.library'则是以个库模块，
+// 其两者的区别是：应用程序模块可以直接运行，库模块要依附于别的应用程序模块来运行。
+android {
+    compileSdkVersion 25        // 指定项目的编译版本，这里的25表使用android7.1系统的SDK进行编译。
+    buildToolsVersion "25.0.1"  // 指定项目构建工具的版本。
+    defaultConfig {
+        applicationId "com.example.administrator.firstcodeforandroid"   // 项目的包名。
+        minSdkVersion 15    // 指定项目最低兼容的Android系统版本，这里的15表示最低兼容到Android 4.0系统。
+        targetSdkVersion 25 // targetSdkVersion指定的值表示你在该目标版本上已经做过了充分的测试，
+                            // 系统将会为你的应用程序启用一些最新的功能和特性。
+        versionCode 1       // 指定项目的版本号。
+        versionName "1.0"   // 指定项目的版本名。
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {    // buildTypes闭包用于指定生成安装文件的相关配置，通常会有release和debug两个闭包。
+        release {   // 指定生成正式版安装文件的配置。
+            minifyEnabled false     // 指定是否对项目的代码进行混淆
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 指定混淆时使用的规则文件，这里指定了两个文件，proguard-android.txt 是Android SDK目录下的，
+            // 里面是所有项目通用的混淆规则，proguard-rules.pro 是当前项目根目录下的，里面可以编写当前项目
+            // 特有的混淆规则。
+            // 注意：通过Android Studio直接运行项目生成的都是测试版安装文件
+        }
+
+        debug {   // 指定生成测试版安装文件的配置。
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+// 通常Android Studio项目一共有3种依赖关系：本地依赖、库依赖、远程依赖。
+// 本地依赖可以对本地的Jar包或目录添加依赖关系；
+// 库依赖可以对项目中的库模块添加依赖关系；
+// 远程依赖则可对jcenter库上的开源项目添加依赖关系。
+
+dependencies {  // 指定当前项目的所有依赖关系
+    compile fileTree(dir: 'libs', include: ['*.jar'])   // 本地依赖，它表示libs目录下所有.jar后缀的文件
+                                                        // 都添加到项目的构建路径当中
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.1'// 远程依赖，
+    // com.android.support是域名部分，用于和其他公司的库做区分；
+    // appcompat-v7是组名字，用于和同一公司的不同库做区分；
+    // 25.0.1是版本号，用于和同一库的不同版本做区分。
+    // 加上这句声明后，Gradle在构建项目时会首先检查一下本地是否有该库的缓存，
+    // 如果没有则会自动联网下载，然后在添加到项目的构建路径当中。
+
+    testCompile 'junit:junit:4.12'     // 声明测试用例库的
+
+    compile 'com.android.support:cardview-v7:25.0.1'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
+
+    // 库依赖这里没有，例如添加一个叫helper的库，基本格式是compile project(':helper')
+}
