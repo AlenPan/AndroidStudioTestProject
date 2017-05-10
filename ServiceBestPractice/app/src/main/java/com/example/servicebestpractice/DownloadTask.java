@@ -12,9 +12,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static android.R.attr.type;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 /**
  * Created by Administrator on 2017/5/10.
  */
@@ -92,6 +89,9 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
                         // 计算已下载的百分比
                         int progress = (int) ((total + downloadLength) * 100 / contentLength);
                         publishProgress(progress);
+                        if (progress == 100) {
+                            return TYPE_SUCCESS;
+                        }
                     }
                 }
             }
